@@ -10,7 +10,7 @@ from fileinput import hook_compressed, hook_encoded, FileInput
 
 __author__ = "Adrian S.-W. Tam"
 __author_email__ = "adrian.sw.tam @ gmail.com"
-__version__ = "0.1"
+__version__ = "0.1.1"
 __all__ = ["input", "close", "nextfile", "filename", "lineno", "filelineno",
            "fileno", "isfirstline", "isstdin", "FileSnitch", "hook_compressed",
            "hook_encoded"]

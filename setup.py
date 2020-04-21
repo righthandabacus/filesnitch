@@ -16,6 +16,7 @@ with open(os.path.join(CWD, 'README.md'), encoding='utf-8') as f:
 
 import filesnitch
 
+# packages is empty for this because filesnitch is a flat file. We're using py_modules instead
 packages = find_packages(exclude=['contrib', 'docs', 'tests'])  # py module name
 package_data = {}
 requires = []
@@ -43,6 +44,7 @@ setup(
 
     # Look for package directories automatically
     packages = packages,
+    py_modules = ['filesnitch'],
     package_data = package_data,
 
     # runtime dependencies
