@@ -10,7 +10,7 @@ from fileinput import hook_compressed, hook_encoded, FileInput
 
 __author__ = "Adrian S.-W. Tam"
 __author_email__ = "adrian.sw.tam @ gmail.com"
-__version__ = "0.1.1"
+__version__ = "0.2"
 __all__ = ["input", "close", "nextfile", "filename", "lineno", "filelineno",
            "fileno", "isfirstline", "isstdin", "FileSnitch", "hook_compressed",
            "hook_encoded"]
@@ -120,6 +120,7 @@ class FileSnitch(FileInput):
         # fill in file sizes on the fly
         self._file_bytes = [None] * len(self._init_files)
         self._readsetup()
+        self._seekable = None
 
     def close(self):
         super().close()
@@ -147,7 +148,11 @@ class FileSnitch(FileInput):
         self._file = None
         self._isstdin = False
         self._backupfilename = 0
-        if self._filename == '-':
+        if isinstance(self._filename, io.IOBase):
+            self._file = self._filename
+            if hasattr(self._file, 'isatty'):
+                self._isstdin = self._file.isatty()
+        elif self._filename == '-':
             self._filename = '<stdin>'
             if 'b' in self._mode:
                 self._file = getattr(sys.stdin, 'buffer', sys.stdin)
@@ -282,7 +287,15 @@ class FileSnitch(FileInput):
 
     def seekable(self):
         """tell if the file sequence is seekable, only a guess"""
-        return all(x != '-' for x in self._init_files)
+        def is_seekable(f):
+            if f == '-':
+                return False
+            if hasattr(f, 'isatty'):
+                return not f.isatty()
+            return False
+        if self._seekable is None:
+            self._seekable = all(is_seekable(x) for x in self._init_files)
+        return self._seekable
 
     def readable(self):
         return True

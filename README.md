@@ -105,3 +105,37 @@ with filesnitch.FileSnitch(filenames) as fileobj:
 
 The `readall()` call is same as `read()` without argument, both will read until
 EOF. `FileSnitch` class can be used as a context manager.
+
+We can also pass in file objects into `FileSnitch()` as long as those file
+objects supports seek and read correctly. An example is as follows: The
+`diabetic-retinopathy-detection.zip` file is a 83GB zip file from
+[Kaggle](https://www.kaggle.com/c/diabetic-retinopathy-detection/data) (with
+correct tools, we can download it using the command `kaggle competitions
+download -c diabetic-retinopathy-detection`). In it, there are seven files,
+named `test.zip.001` to `test.zip.007`, that are parts of a zip file of images.
+To extract one image from it without deflating any zip file onto disk, we can
+do the following:
+
+```python
+import zipfile
+import filesnitch
+
+# this call to zipfile needs `allowZip64=True` because of the size is huge
+with zipfile.ZipFile("diabetic-retinopathy-detection.zip", allowZip64=True) as zip83G:
+	# open each file inside the 83GB zip file, then snitch them up as one file object
+    zipparts = [zip83G.open(f, mode="r") for f in [
+		"test.zip.001",
+		"test.zip.002",
+		"test.zip.003",
+		"test.zip.004",
+		"test.zip.005",
+		"test.zip.006",
+		"test.zip.007",
+	]]
+    with filesnitch.input(files=zipparts, mode='rb') as testzip:
+		# use the snitched file as another zip file, then read a file inside it
+        with zipfile.ZipFile(testzip) as zfp:
+            with zfp.open("test/10000_right.jpeg", mode="r") as fp:
+                with open("10000_right.jpeg", "wb") as outfp:
+                    outfp.write(fp.read())
+```
