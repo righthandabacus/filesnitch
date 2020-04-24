@@ -4,7 +4,6 @@
 [![PyPi Licence](https://img.shields.io/pypi/l/filesnitch.svg)](https://pypi.python.org/pypi/filesnitch/)
 [![PyPi Python Versions](https://img.shields.io/pypi/pyversions/filesnitch.svg)](https://pypi.python.org/pypi/filesnitch/)
 [![PyPi Downloads](http://pepy.tech/badge/filesnitch)](http://pepy.tech/project/filesnitch)
-[![Python Versions](https://img.shields.io/pypi/pyversions/filesnitch.svg)](https://pypi.python.org/pypi/filesnitch/)
 
 This is a module allows you to concatenate multiple files on the fly and
 present as a single read-only file object.
