@@ -138,3 +138,49 @@ with zipfile.ZipFile("diabetic-retinopathy-detection.zip", allowZip64=True) as z
                 with open("10000_right.jpeg", "wb") as outfp:
                     outfp.write(fp.read())
 ```
+
+## API
+
+FileSnitch class derived from [FileInput
+class](https://docs.python.org/3/library/fileinput.html) and the methods
+filename(), fileno(), lineno(), filelineno(), isfirstline(), isstdin(),
+nextfile() and close() are same as the parent class. Contrary to FileInput,
+files opened by FileSnitch by default are in mode `'rb'` instead of `'r'`.
+Random access and readline() should not be mixed and it is not suggested to use
+readline() call with FileSnitch.
+
+### `FileSnitch.read(size=-1)`
+
+Read the specified number of bytes/characters or until the end of the
+concatenated file. Calling `read()` with no argument or with `size=-1` will
+read until the concatenated file is exhaustted. Depends on the mode that the
+files are opened, it returns a `str` or `bytes` object.
+
+### `FileSnitch.readall()`
+
+Same as `read(size=-1)`. It read from the current position until the end of the
+concatenated file.
+
+### `FileSnitch.tell()`
+
+Returns the current position, in number of bytes from the beginning of the
+concatenated file.
+
+### `FileSnitch.seek(offset, wherence=io.SEEK_SET)`
+
+Reset the current position in the concatenated file. It has the same syntax as
+the `seek()` function in other [file
+object](https://docs.python.org/3/tutorial/inputoutput.html#methods-of-file-objects).
+
+### `FileSnitch.seekable()`
+
+Returns a boolean for whether the concatenated file is seekable. It is a best
+effort guess for whether all the component files are seekable.
+
+### `FileSnitch.readable()`
+
+Always returns `True`.
+
+### `FileSnitch.isatty()`
+
+Same as `FileSnitch.seekable()`
