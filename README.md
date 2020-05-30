@@ -53,15 +53,13 @@ To get the latest code using git, simply type:
 
 ## Install
 
-You can use pip to install joblib:
+You can use pip to install from pypi:
 
     pip install filesnitch
 
-from any directory or:
+or, from the source directory:
 
     python setup.py install
-
-from the source directory.
 
 ## Dependencies
 
@@ -89,7 +87,6 @@ concatenated file as if the file object is a standard
 [`io.IOBase`](https://docs.python.org/3/library/io.html#i-o-base-classes). The
 `read()` call accepts the size argument for the number of bytes to read. If no
 size argument provided, it will read until EOF.
-
 
 Read all files in one shot as a large blob:
 
